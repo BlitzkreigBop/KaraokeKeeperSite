@@ -1,0 +1,66 @@
+﻿@using KaraokeKeeper.Models
+@{
+    ViewBag.Title = "SongList";
+}
+
+@{
+    var songList = (List<Song>)ViewData["SongList"]; 
+}
+
+@{
+    if (IsPost)
+    {
+        string songname = Request.Form["songname"];
+        string artistname = Request.Form["artistname"];
+        int grade = Request.Form["grade"].AsInt();
+
+        <text>
+            You entered: <br />
+            Song Name: @songname <br />
+            Artist Name: @artistname <br />
+            Grade: @grade <br />
+        </text>
+    
+        songList.Add(new Song(songname, artistname, grade, 1234));
+    }
+}
+
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+
+<form method="post">
+    <fieldset>
+        <legend>Add Song</legend>
+        <div>
+            <label for="SongName">Song Name:</label>
+            <input type="text" name="SongName" value="" />
+        </div>
+        <div>
+            <label for="ArtistName">Artist Name:</label>
+            <input type="text" name="ArtistName" value="" />
+        </div>
+        <div>
+            <label for="Grade">Grade:</label>
+            <input type="text" name="Grade" value="" />
+        </div>
+        <div>
+            <label>&nbsp;</label>
+            <input type="submit" value="Submit" class="submit" />
+        </div>
+    </fieldset>
+</form>
+
+<div id="Songs">
+    <ol>
+        @{
+            songList = SongList.sortByGrade(songList);
+            for (var i = 0; i < songList.Count; i++)
+            {
+                var song = songList[i];
+                <li>
+                    Name: @song._name, Artist: @song._artist, Grade: @song._grade </li>
+            }
+        }
+    </ol>
+</div>
+
